@@ -12,6 +12,14 @@ def part1(train, label, lambda_input):
     
     ## Input : Arguments to the function
     ## Return : wRR, Final list of values to write in the file
+    train_t = train.T
+    identity = np.eye(len(train_t), dtype = float)
+    xtx = np.dot(train_t,train)
+    li = lambda_input*identity
+    invers = np.linalg.inv(xtx + li)
+    xty = np.dot(train_t,label)
+    ixt = np.dot(invers, xtx)
+    wrr = np.dot(invers, xty)
     
     return wrr
 
