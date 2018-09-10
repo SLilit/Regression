@@ -9,9 +9,6 @@ X_test = np.genfromtxt(sys.argv[5], delimiter = ",")
 
 ## Solution for Part 1
 def part1(train, label, lambda_input):
-    
-    ## Input : Arguments to the function
-    ## Return : wRR, Final list of values to write in the file
     train_t = train.T
     identity = np.eye(len(train_t), dtype = float)
     xtx = np.dot(train_t,train)
@@ -20,6 +17,8 @@ def part1(train, label, lambda_input):
     xty = np.dot(train_t,label)
     ixt = np.dot(invers, xtx)
     wrr = np.dot(invers, xty)
+    ## Input : Arguments to the function
+    ## Return : wRR, Final list of values to write in the file
     
     return wrr
 
@@ -28,7 +27,25 @@ np.savetxt("wRR_" + str(lambda_input) + ".csv", wRR, delimiter="\n") # write out
 
 ## Solution for Part 2
 def part2(train, test, lambda_input, sigma2):
-        
+    locations = []
+    i = 0
+    while i != 10:
+        max_location = 0
+        train_t = train.T
+        identity = np.eye(len(train_t), dtype = float)
+        xtx = np.dot(train_t,train)
+        li = lambda_input*identity
+        sigma = np.linalg.inv(li + sigma2*xtx)
+        max_sigma = sigma + train[0].T*sigma*train[0]
+        for location, x in enumerate(test):
+            sigma0 =sigma + x.T*sigma*x
+            if sigma0 > max_sigma:
+                max_sigma = sigma0
+                max_location = location
+        locations.append(max_location)
+        tran.append(test[max_location])
+        np.delete(test,max_location)
+        i += 1    
     return locations
     ## Input : Arguments to the function
     ## Return : active, Final list of values to write in the file
